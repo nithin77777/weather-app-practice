@@ -63,7 +63,7 @@ const init = async () => {
       locationData.latitude,
       locationData.longitude
     );
-    cardBody = document.getElementsByClassName("w-main-body")[0];
+    const cardBody = document.getElementsByClassName("w-main-body")[0];
     let countryElement = document.createElement("h2");
     countryElement.classList.add("country-weather");
     let localtimeElement = document.createElement("h2");
@@ -98,10 +98,10 @@ init();
 const placeName = () => {
   const place = document.getElementsByClassName("w-place")[0];
   //   console.log(place);
-  place.addEventListener("keydown", (event) => {
+  place.addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
-      console.log("place is", place.value);
-      return place.value;
+      const locationData = await getWeatherPlaceUrlData(place.value);
+      console.log("Searched Location", locationData);
     }
   });
 };
@@ -117,24 +117,17 @@ const placeNAmePromise = () => {
   });
 };
 
-const getWeatherPlaceUrlData = async () => {
-  try {
-    let placeName = await placeNAmePromise();
-    console.log(placeName);
-
-    const url = `https://api.weatherapi.com/v1/current.json?key=323e19f8a59c4cff80861201240206&q=${placeName}&aqi=no`;
-    const rawResponse = await fetch(url);
-    const resultsResponse = await rawResponse.json();
-    return resultsResponse;
-  } catch (error) {
-    console.log(`Unable to Get Weather Data with Place: ${error}`);
+const getWeatherPlaceUrlData = async (place) => {
+  if (place.trim()) {
+    const url = `https://api.weatherapi.com/v1/current.json?key=323e19f8a59c4cff80861201240206&q=${place}&aqi=no`;
+    try {
+      const rawResponse = await fetch(url);
+      const resultsResponse = await rawResponse.json();
+      return resultsResponse;
+    } catch (error) {
+      console.log(`Unable to Get Weather Data with Place: ${error}`);
+    }
   }
 };
 
-const init_place = async () => {
-  const place_name = placeName();
-  const placeData = await getWeatherPlaceUrlData(place_name);
-  // console.log(placeData);
-};
-
-init_place();
+placeName();
