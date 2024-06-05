@@ -122,7 +122,7 @@ const getWeatherPlaceUrlData = async () => {
     let placeName = await placeNAmePromise();
     console.log(placeName);
 
-    const url = `https://api.weatherapi.com/v1/current.json?key=323e19f8a59c4cff80861201240206&q=${place_name}&aqi=no`;
+    const url = `https://api.weatherapi.com/v1/current.json?key=323e19f8a59c4cff80861201240206&q=${placeName}&aqi=no`;
     const rawResponse = await fetch(url);
     const resultsResponse = await rawResponse.json();
     return resultsResponse;
